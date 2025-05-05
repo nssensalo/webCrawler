@@ -1,12 +1,55 @@
 const { JSDOM } = require('jsdom');
-`Get into the DOM
+
+`getUrlsFromHTML()
+Get into the DOM
  Get all the info inside the <a/> tags
  Loop through the list ( and while using the URL constructor for validation):
     if a url ( the href value) starts with a '/'( its a path), concat it to the given base url and append it to the url list
     otherwise just append it to the url list
     return the list
 
+crawlPage()
+This is first crawl a single page. Next will be crawling a whole website.
+Dont do "If error code less than 300 try it", instead stop program if error code is high.
+Check if valid html ( content type is html/text)
 `
+
+async function crawlPage( currentUrl) {
+    try {
+        console.log(`actively crawling: ${currentUrl}`)
+        const resp = await fetch(currentUrl)
+
+        const contentType = resp.headers.get("content-type")
+        console.log(`ContentType:${contentType}`)
+
+        if(resp.status > 399){
+           console.log(`Error ${resp.status} fetching sit:${currentUrl}`)
+           return
+        }
+        if( !contentType.includes("text/html")){ //NOTE: remember in js !== , and !object
+            console.log(`Error, non html response w/ content type: ${contentType} for site:${currentUrl}`)
+            return
+        }
+    
+        
+        console.log( await resp.text()) // NOTE: without await it was pending 
+        
+        
+       
+    } catch(err){
+        console.log(`Error during fetch for site:${currentUrl}. ${err.message}`)
+    }
+   
+        
+ 
+        
+   
+    
+
+    
+}
+
+
 function getUrlsFromHTML (htmlBody, baseUrl) {
     const urls = []
     const dom = new JSDOM(htmlBody)
@@ -50,5 +93,6 @@ function normalizeUrl(urlString) {
 
 module.exports = {
     normalizeUrl,
-    getUrlsFromHTML
+    getUrlsFromHTML,
+    crawlPage
 }
