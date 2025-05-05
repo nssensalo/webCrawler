@@ -36,7 +36,6 @@ test('getUrlsFromHTML ', () => {
             <a href="http://blog.boot.dev/path/">
                 boot.dev Blog
             </a>
-        
         </body>
     </html>
     `
@@ -53,12 +52,34 @@ test('getUrlsFromHTML relative urls', () => { //make /path/the full url
             <a href="/path/">
                 boot.dev Blog
             </a>
+            <a href="http://blog.boot.dev/">
+                boot.dev Path
+            </a>
+            <a href="/bootie/">
+                boot.dev Bootie
+            </a>
         
         </body>
     </html>
     `
     const inputBaseUrl = "http://blog.boot.dev"
     const actual = getUrlsFromHTML(inputHTML,inputBaseUrl)
-    const expected = ["http://blog.boot.dev/path/"]
+    const expected = ["http://blog.boot.dev/path/","http://blog.boot.dev/","http://blog.boot.dev/bootie/"]
+    expect(actual).toEqual(expected)
+})
+
+test('getUrlsFromHTML invalid', () => {
+    const inputHTML = `
+    <html>
+        <body>
+            <a href="/Iamvalidnow">
+                Now Valid
+            </a>
+        </body>
+    </html>
+    `
+    const inputBaseUrl = "http://blog.boot.dev"
+    const actual = getUrlsFromHTML(inputHTML,inputBaseUrl)
+    const expected = ['http://blog.boot.dev/Iamvalidnow']
     expect(actual).toEqual(expected)
 })
