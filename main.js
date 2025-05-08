@@ -1,4 +1,6 @@
 const { crawlPage } = require('./crawl.js');
+const { printReport } = require('./report.js');
+//const { sortPages } = require('./report.js');
 
 //access command line argument 
 //check that it has three parts
@@ -21,9 +23,10 @@ async function main() {
    
     console.log(`Starting web crawl for: ${baseUrl}`) 
     const pages = await crawlPage(baseUrl, baseUrl, {}) // the empty object is the pages object, the 2nd baseUrl is the currentUrl
-    
-    for ( const page of Object.entries(pages)) {     //NOTE: cant do for page of pages because pages not an array, its an object. Entries allows iteration within
-    console.log(page) // AND dont forget const of const page of pages
-   }
+    printReport(pages)
+    //for ( const page of Object.entries(pages)) {     //NOTE: cant do for page of pages because pages not an array, its an object. Entries allows iteration within
+    //console.log(page) // AND dont forget const of const page of pages
+   //}
+   
 }
 main()
